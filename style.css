@@ -526,6 +526,18 @@
     pointer-events: none;
   }
 
+  .footer-slogan {
+    position: absolute;
+    bottom: 5mm;
+    left: 14mm;
+    font-size: 9px;
+    color: #888;
+    line-height: 1.4;
+    pointer-events: none;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+  }
+
   /* 비고 textarea 자동 높이 */
   .auto-textarea {
     width: 100%;
@@ -737,6 +749,7 @@
   }
 
   @media print {
+    @page { margin: 0; }
     .toolbar, #floatRowBtns, #floatExpBtns, #floatSWBtns, .no-print { display: none !important; }
     body { background: white; margin: 0; padding: 0; }
     .main { width: 210mm !important; margin: 0 auto !important; padding: 0 !important; }

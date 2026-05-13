@@ -211,6 +211,7 @@ function paginatePages() {
         ${itemTable.querySelector('thead').outerHTML}
         <tbody class="dynamic-tbody"></tbody>
       </table>
+      <div class="footer-slogan"><strong>기술</strong>로 <strong>사람</strong>과 <strong>자연</strong>이<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;함께하는 세상을 만들어갑니다.</div>
       <div class="page-num">- ${currentPageNum} -</div>
     `;
     newPage.innerHTML = tableHtml;
@@ -330,7 +331,7 @@ function paginateSinglePageB(pageId, startPageNum) {
     const newPage = document.createElement('div');
     newPage.className = `doc-page labor-extra extra-${pageId}`;
     newPage.style.padding = style.padding;
-    newPage.innerHTML = `<div class="doc-content" style="font-size:11px"></div><div class="page-num">- ${pNum} -</div>`;
+    newPage.innerHTML = `<div class="doc-content" style="font-size:11px"></div><div class="footer-slogan"><strong>기술</strong>로 <strong>사람</strong>과 <strong>자연</strong>이<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;함께하는 세상을 만들어갑니다.</div><div class="page-num">- ${pNum} -</div>`;
     
     // 원본 페이지 바로 뒤에 삽입하여 순서 유지
     wrapper.insertBefore(newPage, lastInsertedPage.nextSibling);
@@ -479,14 +480,17 @@ function buildPageA(co, dateStr, noStr, saved, rows, memo) {
             <input id="quoteDate" class="nav-cell" value="${dateStr}" style="border:none;border-bottom:1px solid #bbb;font-size:11.5px;width:130px;font-family:inherit;outline:none;background:transparent;padding:1px 4px">
           </div>
           <div style="display:flex;align-items:flex-end;gap:6px;margin-bottom:8px">
-            <textarea id="clientName" class="nav-cell" rows="1" style="border:none;border-bottom:2px solid var(--text);font-family:'Noto Sans KR',sans-serif;font-size:18px;font-weight:700;width:216px;outline:none;background:transparent;resize:none;overflow:hidden;line-height:1.4;vertical-align:bottom;padding:0" oninput="autoResize(this)" placeholder="협력사명 기재"></textarea>
+            <textarea id="clientName" class="nav-cell" rows="1" style="border:none;border-bottom:2px solid var(--text);font-family:'Noto Sans KR',sans-serif;font-size:18px;font-weight:700;width:216px;outline:none;background:transparent;resize:none;overflow:hidden;line-height:1.4;vertical-align:bottom;padding:0" oninput="autoResize(this)" placeholder="협력사명 기재">${saved.clientName || ''}</textarea>
             <span style="font-size:14px;font-weight:500;color:var(--text-sub);align-self:flex-end">귀하</span>
           </div>
-          <div style="font-size:11.5px;color:var(--text-sub);line-height:1.9">
-            <div>참조 : <input id="refName" class="nav-cell hint-bg"  style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:180px"></div>
-            <div><input id="refTel" class="nav-cell hint-bg"  style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:180px;padding-left:38px"></div>
-            <div style="margin-top:6px">아래와 같이 견적 합니다.</div>
+          <div style="font-size:11.5px;color:var(--text-sub);line-height:1.9;display:flex;gap:4px">
+            <div style="white-space:nowrap">참조 :</div>
+            <div>
+              <input id="refName" class="nav-cell hint-bg" value="${saved.refName || ''}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:180px;display:block">
+              <input id="refTel" class="nav-cell hint-bg" value="${saved.refTel || ''}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:180px;display:block">
+            </div>
           </div>
+          <div style="font-size:11.5px;color:var(--text-sub);margin-top:6px">아래와 같이 견적 합니다.</div>
         </div>
 
         <!-- 공급자 -->
@@ -496,7 +500,7 @@ function buildPageA(co, dateStr, noStr, saved, rows, memo) {
           </div>
           <table class="supplier-tbl">
             <tr>
-              <td class="vert" rowspan="5">공급자</td>
+              <td class="vert" rowspan="6">공급자</td>
               <td class="lbl">사업자등록번호</td>
               <td colspan="2" style="font-size:11.5px">${co.regNo}</td>
             </tr>
@@ -520,9 +524,8 @@ function buildPageA(co, dateStr, noStr, saved, rows, memo) {
               <td colspan="2" style="font-size:11px">${co.bizType}</td>
             </tr>
             <tr>
-              <td style="border:none;background:#f0ede8;width:22px"></td>
               <td class="lbl">담&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;당&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;자</td>
-              <td colspan="2"><input id="contactPerson" class="nav-cell" value="${co.contact}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:100%"></td>
+              <td colspan="2"><input id="contactPerson" class="nav-cell" value="${saved.contactPerson || co.contact}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:100%"></td>
             </tr>
           </table>
         </div>
@@ -572,16 +575,17 @@ function buildPageA(co, dateStr, noStr, saved, rows, memo) {
       <table class="footer-2row">
         <tr>
           <td class="fl">결제정보</td>
-          <td colspan="3"><input id="bankInfo" class="nav-cell" value="${co.bank}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:100%"></td>
+          <td colspan="3"><input id="bankInfo" class="nav-cell" value="${saved.bankInfo || co.bank}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:100%"></td>
         </tr>
         <tr>
           <td class="fl">지불조건</td>
-          <td><input id="payCondition" class="nav-cell" value="${co.payCondition}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:120px"></td>
+          <td><input id="payCondition" class="nav-cell" value="${saved.payCondition || co.payCondition}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:120px"></td>
           <td class="fl">견적유효기간</td>
-          <td><input id="validity" class="nav-cell" value="${co.validity}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:150px"></td>
+          <td><input id="validity" class="nav-cell" value="${saved.validity || co.validity}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:150px"></td>
         </tr>
       </table>
 
+      <div class="footer-slogan"><strong>기술</strong>로 <strong>사람</strong>과 <strong>자연</strong>이<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;함께하는 세상을 만들어갑니다.</div>
       <div class="page-num" id="pageNum1">- 1 -</div>
     </div>`;
 }
@@ -636,6 +640,7 @@ function buildSWDiscountPage(saved) {
         <div>• 대량 구매 또는 연간 계약 시 추가 협의가 가능합니다.</div>
       </div>
 
+      <div class="footer-slogan"><strong>기술</strong>로 <strong>사람</strong>과 <strong>자연</strong>이<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;함께하는 세상을 만들어갑니다.</div>
       <div class="page-num">- 2 -</div>
     </div>
   `;
@@ -713,14 +718,17 @@ function buildPageB(co, dateStr, noStr, saved, rows, memo) {
               <input id="quoteDate" class="nav-cell" value="${dateStr}" style="border:none;border-bottom:1px solid #bbb;font-size:11.5px;width:130px;font-family:inherit;outline:none;background:transparent;padding:1px 4px">
             </div>
             <div style="display:flex;align-items:flex-end;gap:6px;margin-bottom:8px">
-              <textarea id="clientName" class="nav-cell" rows="1" style="border:none;border-bottom:2px solid var(--text);font-family:'Noto Sans KR',sans-serif;font-size:18px;font-weight:700;width:216px;outline:none;background:transparent;resize:none;overflow:hidden;line-height:1.4;vertical-align:bottom;padding:0" oninput="autoResize(this)" placeholder="협력사명 기재"></textarea>
+              <textarea id="clientName" class="nav-cell" rows="1" style="border:none;border-bottom:2px solid var(--text);font-family:'Noto Sans KR',sans-serif;font-size:18px;font-weight:700;width:216px;outline:none;background:transparent;resize:none;overflow:hidden;line-height:1.4;vertical-align:bottom;padding:0" oninput="autoResize(this)" placeholder="협력사명 기재">${saved.clientName || ''}</textarea>
               <span style="font-size:14px;font-weight:500;color:var(--text-sub);align-self:flex-end">귀하</span>
             </div>
-            <div style="font-size:11.5px;color:var(--text-sub);line-height:1.9">
-              <div>참조 : <input id="refName" class="nav-cell hint-bg"  style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:180px"></div>
-              <div><input id="refTel" class="nav-cell hint-bg"  style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:180px;padding-left:38px"></div>
-              <div style="margin-top:6px">아래와 같이 견적 합니다.</div>
+            <div style="font-size:11.5px;color:var(--text-sub);line-height:1.9;display:flex;gap:4px">
+              <div style="white-space:nowrap">참조 :</div>
+              <div>
+                <input id="refName" class="nav-cell hint-bg" value="${saved.refName || ''}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:180px;display:block">
+                <input id="refTel" class="nav-cell hint-bg" value="${saved.refTel || ''}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:180px;display:block">
+              </div>
             </div>
+            <div style="font-size:11.5px;color:var(--text-sub);margin-top:6px">아래와 같이 견적 합니다.</div>
           </div>
 
           <!-- 공급자 -->
@@ -730,7 +738,7 @@ function buildPageB(co, dateStr, noStr, saved, rows, memo) {
             </div>
             <table class="supplier-tbl">
               <tr>
-                <td class="vert" rowspan="5">공급자</td>
+                <td class="vert" rowspan="6">공급자</td>
                 <td class="lbl">사업자등록번호</td>
                 <td colspan="2" style="font-size:11.5px">${co.regNo}</td>
               </tr>
@@ -754,9 +762,8 @@ function buildPageB(co, dateStr, noStr, saved, rows, memo) {
                 <td colspan="2" style="font-size:11px">${co.bizType}</td>
               </tr>
               <tr>
-                <td style="border:none;background:#f0ede8;width:22px"></td>
                 <td class="lbl">담&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;당&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;자</td>
-                <td colspan="2"><input id="contactPerson" class="nav-cell" value="${co.contact}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:100%"></td>
+                <td colspan="2"><input id="contactPerson" class="nav-cell" value="${saved.contactPerson || co.contact}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:100%"></td>
               </tr>
             </table>
           </div>
@@ -797,16 +804,17 @@ function buildPageB(co, dateStr, noStr, saved, rows, memo) {
         <table class="footer-2row">
           <tr>
             <td class="fl">결제정보</td>
-            <td colspan="3"><input id="bankInfo" class="nav-cell" value="${co.bank}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:100%"></td>
+            <td colspan="3"><input id="bankInfo" class="nav-cell" value="${saved.bankInfo || co.bank}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:100%"></td>
           </tr>
           <tr>
             <td class="fl">지불조건</td>
-            <td><input id="payCondition" class="nav-cell" value="${co.payCondition}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:120px"></td>
+            <td><input id="payCondition" class="nav-cell" value="${saved.payCondition || co.payCondition}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:120px"></td>
             <td class="fl">견적유효기간</td>
-            <td><input id="validity" class="nav-cell" value="${co.validity}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:150px"></td>
+            <td><input id="validity" class="nav-cell" value="${saved.validity || co.validity}" style="border:none;outline:none;font-family:inherit;font-size:11.5px;background:transparent;width:150px"></td>
           </tr>
         </table>
 
+      <div class="footer-slogan"><strong>기술</strong>로 <strong>사람</strong>과 <strong>자연</strong>이<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;함께하는 세상을 만들어갑니다.</div>
       <div class="page-num" id="pageNum1">- 1 -</div>
     </div>
   </div>`;
@@ -909,6 +917,7 @@ function buildLaborCostPageB(saved) {
       </div>
 
     </div>
+    <div class="footer-slogan"><strong>기술</strong>로 <strong>사람</strong>과 <strong>자연</strong>이<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;함께하는 세상을 만들어갑니다.</div>
     <div class="page-num" id="pageNum2">- 2 -</div>
   </div>
 
@@ -963,6 +972,7 @@ function buildLaborCostPageB(saved) {
       <div class="section-title-box"><span class="section-badge">7</span> 견적금액 : <input class="final-total section-amount" readonly value="${final.total||'0'}"> 원</div>
       <div class="formula-text" style="margin-bottom:40px">일금 <span id="textAmountB">0</span> ≒ <input class="final-total formula-input" style="width:90px" readonly value="${final.total||'0'}"> <span id="discountTextB">(${ruleText})</span></div>
     </div>
+    <div class="footer-slogan"><strong>기술</strong>로 <strong>사람</strong>과 <strong>자연</strong>이<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;함께하는 세상을 만들어갑니다.</div>
     <div class="page-num" id="pageNum3">- 3 -</div>
   </div>`;
 }
